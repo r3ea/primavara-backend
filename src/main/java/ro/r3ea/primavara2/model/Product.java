@@ -31,8 +31,8 @@ public class Product {
 //	@Column(name="id_cat")
 //	private Integer idCat;
 	
-	@ManyToOne
-	@JoinColumn(name="id_cat")
+	@ManyToOne // foreign key
+	@JoinColumn(name="id_cat")  // foreign key
 	private Category categorieAsociata;
 	
 	@ManyToMany// (cascade ALL)

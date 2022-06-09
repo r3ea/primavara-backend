@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Primavara2Application {
 
 	public static void main(String[] args) {
+		System.out.println("SPRING STARTED");
 		SpringApplication.run(Primavara2Application.class, args);
 	}
 

@@ -70,6 +70,7 @@ public class CategoriiServlet {
 	
 	@DeleteMapping("/delete/{idCat}")
 	public Category deleteCategory(@PathVariable("idCat") int idCat) {
+		System.out.println("HELLO CATEGORII DELETE");
 		Category cat = dateCategory.findById(idCat).get();
 //		List<Product> productsInCategory = dateProdus.findByCategorieAsociata(cat);
 //		for(Product p : productsInCategory) {

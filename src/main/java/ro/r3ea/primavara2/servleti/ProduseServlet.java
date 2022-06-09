@@ -49,6 +49,98 @@ public class ProduseServlet {
 		return dateProdus.findAll(); // SELECT * FROM products;
 	}
 	
+	@GetMapping("/pagina/{nrPagina}")
+	public List<Product> functieCareIntoarcePagina(@PathVariable("nrPagina") int nrPagina){
+		return dateProdus.gasesteCuPaginare(nrPagina*5);
+	}
+	
+	// TODO:
+	
+	
+	
+	@GetMapping("/test-array")
+	public String[] getArrayTest() {
+		String[] names = {"Alice", "Bob", "Jack"};
+		names[2] = "Jackson";
+		// names[3] = "Bob";
+		return names;
+	}
+	
+	@GetMapping("/test-list")
+	public List<String> getListTest(){
+		List<String> lista = new ArrayList<>();
+		lista.add("Bobby");
+		lista.add("Jackie");		
+		return lista;
+		
+	}
+	
+	
+	@GetMapping("/get-day/{numberOfDay}")
+	public String getTheDay(@PathVariable("numberOfDay") int nrDay) {
+		
+		String zile[] = {"LUNI", "MARTI", "MIERCURI", "JOI", "VINERI", "SAMBATA", "DUMINICA"};
+		
+		return zile[nrDay];
+	}
+	
+	
+	@GetMapping("/pagina-cautare-new/{searchTerm}/{nrPagina}/{nrElementePePagina}")
+	public List<Product> functieCareIntoarceCautareSiPagina(
+			@PathVariable("searchTerm") String searchTerm, 
+			@PathVariable("nrPagina") int nrPagina,
+			@PathVariable("nrElementePePagina") int nrElementePePagina
+		){
+		
+		Integer numbers[] = {10, 30, 20};
+		
+		
+		
+		List<Product> productsWhichMatchTheCriteria = dateProdus.cautareSomethingInSomething(
+				searchTerm, 
+				nrPagina*nrElementePePagina, 
+				nrElementePePagina);
+		return productsWhichMatchTheCriteria;
+	}
+	
+	
+	@GetMapping("/pagina-cautare-old/{searchTerm}/{nrPagina}/{nrElementePePagina}")
+	public List<Product> functieCareIntoarceCautareSiPaginaVariantaCuMultCodSiSELECTALL(
+			@PathVariable("searchTerm") String searchTerm, 
+			@PathVariable("nrPagina") int nrPagina,
+			@PathVariable("nrElementePePagina") int nrElementePePagina
+		){
+		List<Product> productsWhichMatchTheCriteria = new ArrayList<>();
+		
+		
+		// 0 - 123
+		// 1 - 456
+		// ...
+		
+		int nrProduseSkip = nrElementePePagina*nrPagina;
+		int nrProduse = 0;
+		int nrProduseGasite = 0;
+		
+		Iterable<Product> allProducts = dateProdus.findAll(); // SELECT * FROM products;
+		for(Product p : allProducts) {
+			if(p.getName().toLowerCase().contains(searchTerm.toLowerCase())) { // "ShaOrmA" --- "ShaoRMA"
+				
+				
+				nrProduseGasite++;
+				
+				if(nrProduseGasite > nrProduseSkip) {
+					productsWhichMatchTheCriteria.add(p);
+					nrProduse++;
+					if(nrProduse == nrElementePePagina) {
+						break;
+					}
+				}
+			}
+		}
+		// TODO: call the DateProdus new method
+		return productsWhichMatchTheCriteria;
+	}
+	
 	@GetMapping("/by-id/{id}")
 	public Product gasesteProdus(@PathVariable("id") int id) {
 		return this.dateProdus.findById(id).get();
@@ -121,11 +213,13 @@ public class ProduseServlet {
 	
 	// http://localhost:9000/produse/delete/7
 	@DeleteMapping("/delete/{id}")
-	public Product stergeProdus(@PathVariable("id") int id) throws InterruptedException {
+	public Product stergeProdus(@PathVariable("id") int id) {
 		
-		
+//		int numbers[] = {1,2,3};
+//		List<Integer> numbersList = new ArrayList<>();
+//		numbersList.add
 		/// simulate a nasty server
-		Thread.sleep(5000);
+		// Thread.sleep(5000);
 		
 		Product produsDeSters = this.dateProdus.findById(id).get();
 		produsDeSters.setTaguriAsociate(null);
@@ -149,6 +243,8 @@ public class ProduseServlet {
 	public Product updateazaProdusSimple(@RequestBody Product produs) {
 		
 		Product produsUpdatat = this.dateProdus.save(produs);
+//		String sir = null;
+//		System.out.println(sir.toUpperCase());
 		return produsUpdatat;
 	}
 	
